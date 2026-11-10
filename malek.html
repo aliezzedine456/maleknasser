@@ -64,7 +64,7 @@ body[data-v=show] #nav{background:linear-gradient(135deg,rgba(255,255,255,.34),r
 #cv{opacity:0}
 .ph{position:absolute;inset:0;z-index:1;display:grid;place-items:center;color:#fff;font-weight:700;background:linear-gradient(100deg,#111 30%,#222 50%,#111 70%) 0 0/200% 100%;animation:sh 1.4s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
-.pg{position:absolute;left:0;bottom:0;height:4px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--a)}
+.pg{position:fixed;z-index:49;left:0;bottom:env(safe-area-inset-bottom,0px);height:4px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--a)}
 .info{padding:72px 0 40px}
 .ih{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
 .ih h2{font-size:clamp(34px,6vw,64px)}
@@ -183,12 +183,12 @@ function showcase(id){
  if(!a){$('#app').innerHTML=`<p class="wrap hero">${ready?'Apartment not found.':'Loading…'}</p>`;return}
  $('#app').innerHTML=`<a class="back" href="#home">‹ All apartments</a>
  <section class="film" id="film"><div class="stage"><div class="vw" id="vw"><video muted playsinline preload="auto" data-s="${esc(a.videoUrl)}"></video><canvas id="cv"></canvas><div class="ph">${a.videoUrl?'Loading':'Video coming soon'}</div>
- <div class="ov2" id="ov2"><h1>${esc(a.name)}</h1><span class="id" style="color:#fff">${a.id}</span><span class="cue">Scroll to walk inside</span></div></div><i class="pg" id="pg"></i></div></section>
+ <div class="ov2" id="ov2"><h1>${esc(a.name)}</h1><span class="id" style="color:#fff">${a.id}</span><span class="cue">Scroll to walk inside</span></div></div></div></section><i class="pg" id="pg"></i>
  <section class="info" id="info"></section>`;
  info(a);fx();
 }
 let raf=0,g=0;const BL={},PF={},FC={};
-// video files are downloaded once and kept; the frame cache of the last apartment is kept too, so going back is instant
+// Videos are downloaded once. Frames are stored as small JPEGs (about 10 MB per apartment) and only a few are decoded at a time, so phones never run out of memory.
 const blob=src=>BL[src]?Promise.resolve(BL[src]):(PF[src]??=fetch(src).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>BL[src]=URL.createObjectURL(b)).catch(e=>{delete PF[src];throw e}));
 async function fx(){
  cancelAnimationFrame(raf);const v=$('video'),cv=$('#cv'),ph=$('.ph');if(!v||!v.dataset.s)return;
@@ -197,28 +197,34 @@ async function fx(){
  if(!ok())return;
  v.src=u;await new Promise(r=>{v.addEventListener('loadeddata',r,{once:true});v.addEventListener('error',r,{once:true})});
  const D=v.duration;if(!ok()||!D)return;
- const E=D-.06,N=Math.min(innerWidth<700?90:108,Math.round(D*(innerWidth<700?9:11)));let F,W,H;
- if(FC.src===src)({F,W,H}=FC);
+ const fine=matchMedia('(pointer:fine)').matches,E=D-.06,N=Math.min(120,Math.round(D*12));let J,W,H;
+ if(FC[src])({J,W,H}=FC[src]);
  else{
   const seek=t=>new Promise(r=>{v.addEventListener('seeked',r,{once:true});v.currentTime=t;setTimeout(r,700)});
-  W=innerWidth<700?400:576;H=Math.round(W*v.videoHeight/v.videoWidth);F=[];
-  for(let i=0;i<N;i++){if(!ok())return;await seek(.001+i/(N-1)*E);const c=document.createElement('canvas');c.width=W;c.height=H;const k=c.getContext('2d');k.imageSmoothingQuality='high';k.drawImage(v,0,0,W,H);F.push(c);ph.textContent='Loading '+Math.round(i/N*100)+'%'}
-  Object.assign(FC,{src,F,W,H});
+  W=fine?720:540;H=Math.round(W*v.videoHeight/v.videoWidth);J=[];
+  const c=document.createElement('canvas');c.width=W;c.height=H;const k=c.getContext('2d');k.imageSmoothingQuality='high';
+  for(let i=0;i<N;i++){if(!ok())return;await seek(.001+i/(N-1)*E);k.drawImage(v,0,0,W,H);J.push(await new Promise(r=>c.toBlob(r,'image/jpeg',.88)));ph.textContent='Loading '+Math.round(i/N*100)+'%'}
+  FC[src]={J,W,H};
  }
- cv.width=W;cv.height=H;const x=cv.getContext('2d');
- const draw=t=>{const p=t/E*(F.length-1),i=Math.min(F.length-2,Math.floor(p)),a=p-i;x.globalAlpha=1;x.drawImage(F[i],0,0);if(a>.02){x.globalAlpha=a;x.drawImage(F[i+1],0,0)}};
+ cv.width=W;cv.height=H;const x=cv.getContext('2d'),B={},R={};
+ const want=i=>{if(!B[i])B[i]=createImageBitmap(J[i]).then(b=>{R[i]=b})};
+ const around=c=>{for(let i=Math.max(0,c-4);i<=Math.min(N-1,c+10);i++)want(i);for(const k in R)if(k<c-16||k>c+22){R[k].close();delete R[k];delete B[k]}};
+ const near=i=>{for(let d=0;d<4;d++){if(R[i-d])return R[i-d];if(R[i+d])return R[i+d]}return null};
+ const draw=t=>{const p=t/E*(N-1),i=Math.min(N-2,Math.floor(p)),a=p-i;around(i);const b=near(i);if(!b)return;x.globalAlpha=1;x.drawImage(b,0,0);if(a>.02&&R[i]&&R[i+1]){x.globalAlpha=a;x.drawImage(R[i+1],0,0)}};
+ for(let i=0;i<3;i++)want(i);await Promise.all([B[0],B[1],B[2]]);
+ if(!ok())return;
  draw(0);cv.style.opacity=1;ph.remove();
  const f=$('#film');f.style.height=Math.min(800,Math.max(350,D*45))+'vh';
  let vt=0,idle=0,shown=1,last=-1,top=0,span=1;
  const m=()=>{top=f.offsetTop;span=Math.max(1,f.offsetHeight-innerHeight)};m();addEventListener('resize',m);
  const pg=$('#pg'),ov=$('#ov2'),hide=()=>{cv.style.transition='opacity .2s';cv.style.opacity=0;shown=0};
- v.addEventListener('seeked',()=>{if(idle>=5&&shown)hide()});
- const loop=()=>{if(!ok())return;
+ if(fine)v.addEventListener('seeked',()=>{if(idle>=5&&shown)hide()});
+ const loop=()=>{if(!ok()){for(const k in R)R[k].close();return}
   const p=Math.min(1,Math.max(0,(scrollY-top)/span)),t=p*E;
   vt+=(t-vt)*.14;
   pg.style.transform=`scaleX(${p})`;ov.style.opacity=1-Math.min(1,p*8);
   if(Math.abs(t-vt)>.002){idle=0;if(!shown){cv.style.transition='none';cv.style.opacity=1;shown=1}if(Math.abs(vt-last)>.0005){draw(vt);last=vt}}
-  else{idle++;if(idle>=5&&!v.seeking){if(Math.abs(v.currentTime-vt)>.012)v.currentTime=vt;else if(shown)hide()}}
+  else if(fine){idle++;if(idle>=5&&!v.seeking){if(Math.abs(v.currentTime-vt)>.012)v.currentTime=vt;else if(shown)hide()}}
   raf=requestAnimationFrame(loop)};
  loop();
 }
