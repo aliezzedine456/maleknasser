@@ -3,41 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Residences – Apartments for rent</title>
+<title>Malek Homes – Apartments for rent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--a:#00D6AC;--k:#000;--s:rgba(0,0,0,.62);--l:rgba(0,0,0,.14);--g:#f4f6f6}
-*{box-sizing:border-box;margin:0}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+a,button,label,#nav,.ap{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+::selection{background:rgba(0,214,172,.35)}
 html{scroll-behavior:smooth}
 body{font:500 16px/1.55 Lato,system-ui,sans-serif;color:var(--k);background:#fff;-webkit-font-smoothing:antialiased;padding-bottom:110px}
 img,video{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus{outline:none}
 :focus-visible{outline:2px solid var(--k);outline-offset:3px}
 .wrap{max-width:1180px;margin:auto;padding:0 20px}
 h1,h2,h3{font-weight:900;letter-spacing:-.02em;line-height:1.05}
-.hero{padding-top:14vh;padding-bottom:48px}
-.hero h1{font-size:clamp(40px,8vw,96px);letter-spacing:-.035em}
-.hero p{max-width:520px;margin-top:20px;color:var(--s);font-size:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px}
-.card{display:block;border-radius:28px;overflow:hidden;background:var(--g);transition:transform .35s}
-.card:hover{transform:translateY(-6px)}
-.im{position:relative;aspect-ratio:3/4;overflow:hidden;background:#e4e8e8}
-.im video{width:100%;height:100%;object-fit:cover;transition:transform .6s}
-.card:hover .im video{transform:scale(1.05)}
-.tk .im video{filter:grayscale(.85) brightness(.8)}
+.nf{padding-top:14vh;padding-bottom:48px}
+#apartments{padding:12px 12px 0;display:grid;gap:12px}
+.ap{position:relative;display:block;height:calc(100svh - 24px);min-height:520px;border-radius:32px;overflow:hidden;background:#111;color:#fff;isolation:isolate}
+.ap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.4s cubic-bezier(.2,.7,.2,1),filter .6s}
+.ap:hover video{transform:scale(1.04)}
+.ap:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.3),transparent 24%,transparent 40%,rgba(0,0,0,.8))}
+.ap.tk video{filter:grayscale(.9) brightness(.75)}
 .bd{display:inline-block;padding:5px 12px;border-radius:20px;font-size:12.5px;font-weight:900}
-.bd.v{background:var(--a)}.bd.t{background:#000;color:#fff}
-.im .bd{position:absolute;top:14px;left:14px}
-.cb{padding:20px 22px 22px}
-.r1{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.r1 h3{font-size:24px}
+.bd.v{background:var(--a);color:#000}.bd.t{background:#000;color:#fff}
+.ap .bd{position:absolute;top:96px;left:clamp(22px,4vw,52px)}
 .id{font-size:13px;font-weight:700;color:var(--s)}
-.cb p{margin:8px 0 14px;color:var(--s);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:3.1em}
-.mt{display:flex;gap:14px;align-items:center;font-weight:700;font-size:14px}
-.mt strong{margin-left:auto;font-size:20px;font-weight:900}
+.tx{position:absolute;left:0;right:0;bottom:0;padding:0 clamp(22px,4vw,52px) calc(84px + env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:22px}
+.ap h2{font-size:clamp(46px,10vw,124px);letter-spacing:-.045em;line-height:.92}
+.mm{margin-top:14px;font-weight:700;font-size:clamp(15px,1.7vw,18px);opacity:.92}
+.rt{display:flex;align-items:center;gap:18px}
+.pp{font-size:clamp(28px,4.2vw,46px);font-weight:900;line-height:1;letter-spacing:-.02em}
+.pp small{font-size:.42em;font-weight:700;opacity:.85;margin-left:5px;letter-spacing:0}
+.go{width:58px;height:58px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none;transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .3s}
+.go svg{width:24px;height:24px;fill:none;stroke:#000;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ap:hover .go{transform:translateX(6px);background:var(--a)}
 section.wrap{padding-top:48px}
 #contact{padding-bottom:40px}
 #contact h2{font-size:clamp(30px,5vw,48px);margin-bottom:24px}
@@ -47,7 +50,6 @@ section.wrap{padding-top:48px}
 .cg small{display:block;color:var(--s);font-weight:700}
 .cg b{font-weight:900;font-size:18px;word-break:break-word}
 /* showcase */
-.back{position:fixed;top:calc(14px + env(safe-area-inset-top));left:14px;z-index:40;padding:10px 18px;border-radius:22px;font-weight:900;font-size:14px;background:rgba(255,255,255,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 body[data-v=show] #nav{background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,.14));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .intro{position:relative;height:100svh;background:#000;color:#fff}
 .intro img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -69,6 +71,7 @@ body[data-v=show] #nav{background:linear-gradient(135deg,rgba(255,255,255,.34),r
 .ih{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
 .ih h2{font-size:clamp(34px,6vw,64px)}
 .pr{font-size:clamp(28px,4vw,44px);font-weight:900;display:flex;align-items:center;gap:14px}
+.pr small{font-size:.45em;font-weight:700;color:var(--s);margin-left:4px}
 .st{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:32px 0}
 .st div{background:var(--g);border-radius:20px;padding:16px 18px}
 .st dt{font-size:13px;font-weight:700;color:var(--s)}
@@ -83,34 +86,37 @@ body[data-v=show] #nav{background:linear-gradient(135deg,rgba(255,255,255,.34),r
 .b1{background:#000;color:#fff}.b2{background:var(--a);color:#000}
 .b1:hover,.b2:hover{transform:translateY(-2px)}
 .b1:disabled{background:rgba(0,0,0,.12);color:var(--s);cursor:not-allowed;transform:none}
-/* admin */
-.lg{max-width:440px;padding-top:14vh}
-.lg h2{font-size:36px;margin-bottom:20px}
-form{display:grid;gap:12px}
-label{display:grid;gap:4px;font-weight:700;font-size:13px;color:var(--s)}
-input,textarea{font:inherit;color:var(--k);background:var(--g);border:0;border-radius:14px;padding:13px 15px;width:100%}
-.er{color:#000;font-weight:700}
-code{display:block;background:var(--g);padding:12px;border-radius:12px;margin:12px 0;word-break:break-all}
-.ah{display:flex;justify-content:space-between;align-items:center;padding-top:10vh;margin-bottom:20px}
-.ah h2{font-size:40px}
-.al{display:grid;gap:12px;margin-top:20px}
-.ar{display:grid;grid-template-columns:72px 1fr auto auto;gap:16px;align-items:center;background:var(--g);border-radius:22px;padding:12px}
-.ar video{aspect-ratio:9/16;object-fit:cover;width:72px;border-radius:12px;background:#e4e8e8}
-.ar b{display:block;font-weight:900}
-.sw{display:flex;align-items:center;gap:10px;grid-auto-flow:column;color:var(--k);cursor:pointer}
-.sw input{position:absolute;opacity:0;width:0}
-.sw span{width:48px;height:28px;border-radius:14px;border:1.5px solid #000;background:#fff;position:relative;transition:background .3s}
-.sw span:after{content:"";position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;background:#000;transition:transform .3s}
-.sw input:checked+span{background:var(--a)}
-.sw input:checked+span:after{transform:translateX(20px)}
-.sw input:focus-visible+span{outline:2px solid #000;outline-offset:3px}
-.sw em{font-style:normal;font-weight:900;min-width:68px}
-dialog{border:0;border-radius:26px;padding:24px;width:min(94vw,560px);max-height:90vh;overflow:auto}
-dialog::backdrop{background:rgba(0,0,0,.45)}
-dialog h3{font-size:26px;margin-bottom:6px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#000;color:#fff;padding:12px 20px;border-radius:14px;font-weight:700;z-index:99;opacity:0;pointer-events:none;transition:opacity .3s}
 #toast.on{opacity:1}
+/* top navigation */
+#top{position:fixed;z-index:60;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(calc(100% - 24px),1180px);height:64px;padding:0 8px 0 16px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;border-radius:34px;background:linear-gradient(135deg,rgba(255,255,255,.86),rgba(255,255,255,.55));backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);border:1px solid rgba(0,0,0,.14);box-shadow:0 10px 32px rgba(0,0,0,.12)}
+#top .l{display:flex;align-items:center;min-width:0}
+.br{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px;letter-spacing:-.02em;white-space:nowrap}
+.br i{width:36px;height:36px;border-radius:12px;background:#000;display:grid;place-items:center;flex:none}
+.br svg{width:20px;height:20px;fill:none;stroke:var(--a);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bk{display:none;align-items:center;height:44px;padding:0 18px;border-radius:24px;background:rgba(0,0,0,.07);font-weight:900;font-size:14px;transition:background .3s}
+.bk:hover{background:rgba(0,0,0,.12)}
+body[data-v=show] .br,body[data-v=show] .lk{display:none}
+body[data-v=show] .bk{display:inline-flex}
+.lk{display:flex;gap:2px;padding:4px;border-radius:28px;background:rgba(0,0,0,.05)}
+.lk button{height:40px;padding:0 20px;border-radius:24px;font-weight:700;font-size:15px;transition:background .3s,color .3s}
+.lk button:hover{background:rgba(0,0,0,.07)}
+.lk button.on{background:#000;color:#fff}
+.ac{display:flex;gap:8px;justify-content:flex-end}
+.ac a{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:26px;font-weight:900;font-size:15px;white-space:nowrap;transition:transform .25s,background .3s}
+.ac svg{width:18px;height:18px;fill:none;stroke:#000;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ac .cl{background:rgba(0,0,0,.07)}.ac .cl:hover{background:rgba(0,0,0,.12)}
+.ac .wa{background:var(--a)}.ac .wa:hover{transform:translateY(-2px)}
+@media(max-width:899px){
+ #top{height:58px;padding:0 6px 0 12px;grid-template-columns:1fr auto;border-radius:30px}
+ .lk,.ac .cl{display:none}
+ .br{font-size:17px}.br i{width:32px;height:32px;border-radius:11px}
+ .ac a{height:44px;padding:0 17px;font-size:14px}
+ .ap{border-radius:26px}.ap .bd{top:88px}
+ .tx{flex-direction:column;align-items:flex-start;flex-wrap:nowrap;gap:14px}
+ .rt{width:100%;justify-content:space-between}
+}
+@media(max-width:360px){.br span{display:none}}
 /* liquid glass nav (from reference) */
 #nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(92vw,440px);height:66px;padding:0 6px;z-index:50;display:flex;border-radius:34px;background:linear-gradient(135deg,rgba(255,255,255,.78),rgba(255,255,255,.38));backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1.2px solid rgba(0,0,0,.55);box-shadow:0 8px 24px rgba(0,0,0,.1);--n:3;--i:0}
 #bub{position:absolute;left:6px;top:6px;width:calc((100% - 12px)/var(--n));height:51.6px;border-radius:28px;background:linear-gradient(180deg,rgba(0,214,172,.95),rgba(0,214,172,.7));border:1.4px solid rgba(255,255,255,.9);box-shadow:0 3px 14px rgba(0,214,172,.45);transform:translateX(calc(var(--i)*100%));transition:transform .52s cubic-bezier(.34,1.56,.64,1)}
@@ -118,36 +124,43 @@ dialog h3{font-size:26px;margin-bottom:6px}
 #nav button.on{transform:scale(1.06);font-weight:900}
 #nav [hidden]{display:none}
 #nav svg{width:24px;height:24px;fill:none;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:640px){.ar{grid-template-columns:72px 1fr}.ar video{width:72px}.ar .sw,.ar .b2{grid-column:1/-1}.g2{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+@media(min-width:900px){
+ #nav{display:none}
+ body{padding-bottom:0}
+ #contact{padding-bottom:72px}
+ .tx{padding-bottom:30px}
+}
 </style>
 </head>
 <body>
+<header id="top">
+<div class="l"><button class="br" data-k="home" aria-label="Malek Homes, home"><i><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-5h4v5"/></svg></i><span>Malek Homes</span></button><a class="bk" href="#home">‹ All apartments</a></div>
+<nav class="lk" aria-label="Primary"><button data-k="home">Apartments</button><button data-k="contact">Contact</button></nav>
+<div class="ac"><a class="cl" id="call" href="#"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>Call</a><a class="wa" id="cta" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>WhatsApp</a></div>
+</header>
 <main id="app"></main>
-<dialog id="dlg"></dialog>
 <div id="toast" role="status"></div>
 <nav id="nav" aria-label="Main">
 <i id="bub"></i>
 <button data-k="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>Home</button>
-<button data-k="apartments"><svg viewBox="0 0 24 24"><path d="M4 21V4h11v17M15 9h5v12M8 8h3M8 12h3M8 16h3M2 21h20"/></svg>Apartments</button>
 <button data-k="contact"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>Contact</button>
-<button data-k="admin" hidden><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Admin</button>
 </nav>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import{getFirestore,collection,doc,onSnapshot,getDoc,setDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import{getFirestore,collection,onSnapshot}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // ---- Owner details: replace the two placeholders ----
-const CFG={phone:'76000608',wa:'96176000608',email:'OWNER_EMAIL',place:'PROPERTY_LOCATION',placeUrl:'',ids:['APT-001','APT-002','APT-003','APT-004'],
+const CFG={phone:'76000608',wa:'96176000608',place:'PROPERTY_LOCATION',placeUrl:'',ids:['APT-001','APT-002'],
 // ImageKit video links used when the dashboard creates the apartments (add the rest as you get them)
-videos:{'APT-001':'https://ik.imagekit.io/shoppage1/apartments/APT-001/Real_estate_room_video_showcase_1bdff681.mp4'}};
+videos:{'APT-001':'https://ik.imagekit.io/shoppage1/apartments/APT-001/Real_estate_room_video_showcase_1bdff681.mp4','APT-002':'https://ik.imagekit.io/shoppage1/apartments/APT-001/room_showcase_20s_loop_under10MB.mp4'}};
 
 const app=initializeApp({apiKey:"AIzaSyBHxvwcUrjHNNSp9Sxb8p1asHjAEfuV8BE",authDomain:"maleknasser-93969.firebaseapp.com",projectId:"maleknasser-93969",storageBucket:"maleknasser-93969.firebasestorage.app",messagingSenderId:"148393816988",appId:"1:148393816988:web:a38c6bd4a007dfe30ece59",measurementId:"G-HDBTYLCZNT"});
-const db=getFirestore(app),auth=getAuth(app);
+const db=getFirestore(app);
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+$('#cta').href='https://wa.me/'+CFG.wa;$('#call').href='tel:+961'+CFG.phone;
 const ik=(u,w)=>u&&u.includes('ik.imagekit.io')?u+(u.includes('?')?'&':'?')+`tr=w-${w},q-80,f-auto`:(u||'');
 const money=a=>{if(a.price==null)return'';try{return new Intl.NumberFormat('en',{style:'currency',currency:a.currency||'USD',maximumFractionDigits:0}).format(a.price)}catch{return a.price}};
 const taken=a=>a.status==='taken';
@@ -155,34 +168,35 @@ const mapUrl=a=>{const l=a.location||{};return l.googleMapsUrl||(l.latitude!=nul
 const wa=a=>`https://wa.me/${CFG.wa}?text=`+encodeURIComponent(`Hello, I am interested in apartment ${a.id}. I would like to know more about its availability and rental details.`);
 const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2600)};
 
-let A={},ready=false,user=null,isAdmin=false,cur='home',sec='home',pend=null;
+let A={},ready=false,cur='home',sec='home',pend=null;
 // Shown until Firestore has the apartment, so the site works from the first load
 const dflt=id=>({id,name:'Apartment '+id.slice(-1),description:'',price:null,currency:'USD',status:'available',videoUrl:CFG.videos[id]||'',gallery:[],facilities:[],location:{},missing:1});
-const get=id=>A[id]||(CFG.ids.includes(id)?dflt(id):null);
+const get=id=>{const a=A[id]||(CFG.ids.includes(id)?dflt(id):null);return a&&!a.videoUrl&&CFG.videos[id]?{...a,videoUrl:CFG.videos[id]}:a};
 
 // ---- data (real-time) ----
 onSnapshot(collection(db,'apartments'),s=>{A={};s.forEach(d=>A[d.id]={...d.data(),id:d.id});ready=true;refresh()},e=>{ready=true;toast('Could not load apartments');console.error(e)});
-onAuthStateChanged(auth,async u=>{user=u;isAdmin=false;if(u){try{isAdmin=(await getDoc(doc(db,'admins',u.uid))).exists()}catch{}}
- document.querySelector('[data-k=admin]').hidden=!isAdmin;nav();if(cur==='admin')admin()});
-
 // ---- views ----
-const card=a=>`<a class="card ${taken(a)?'tk':''}" href="#/${a.id}"><div class="im">${a.videoUrl?`<video muted playsinline loop preload="metadata" src="${esc(a.videoUrl)}#t=0.1" aria-label="${esc(a.name)}"></video>`:''}<b class="bd ${taken(a)?'t':'v'}">${taken(a)?'Taken':'Available'}</b></div><div class="cb"><div class="r1"><h3>${esc(a.name)}</h3><span class="id">${a.id}</span></div><p>${esc(a.description||(a.missing?'Details coming soon.':''))}</p><div class="mt"><span>${a.bedrooms??'–'} bd</span><span>${a.bathrooms??'–'} ba</span><span>${a.area??'–'} m²</span><strong>${money(a)}</strong></div></div></a>`;
-function cards(){const e=$('#cards');if(e)e.innerHTML=CFG.ids.map(i=>card(get(i))).join('')}
+const per=a=>a.period==='day'?'day':'month';
+const pHtml=a=>{const m=a.price?money(a):'';return m?`${m}<small>/ ${per(a)}</small>`:'<small>Ask for the price</small>'};
+const card=a=>{const mm=[[a.bedrooms,'bedroom'],[a.bathrooms,'bathroom'],[a.area,'m²']].filter(([v])=>v>0).map(([v,u])=>u==='m²'?v+' m²':v+' '+u+(v>1?'s':'')).join('  ·  ');
+ return`<a class="ap ${taken(a)?'tk':''}" href="#/${a.id}" aria-label="${esc(a.name)}">${a.videoUrl?`<video muted playsinline loop preload="metadata" src="${esc(a.videoUrl)}#t=0.1"></video>`:''}<b class="bd ${taken(a)?'t':'v'}">${taken(a)?'Taken':'Available'}</b><div class="tx"><div><h2>${esc(a.name)}</h2>${mm?`<p class="mm">${mm}</p>`:''}</div><div class="rt"><span class="pp">${pHtml(a)}</span><i class="go"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></div></div></a>`};
+let io;
+function watch(){io?.disconnect();const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector('video');if(!v)return;if(e.isIntersecting&&!calm)v.play().catch(()=>{});else v.pause()}),{threshold:.4});
+ document.querySelectorAll('.ap').forEach(el=>io.observe(el))}
+function cards(){const e=$('#apartments');if(!e)return;const h=CFG.ids.map(i=>card(get(i))).join('');if(cards.h===h&&e.children.length)return;cards.h=h;e.innerHTML=h;watch()}
 function home(){
- $('#app').innerHTML=`<header class="hero wrap"><h1>Four apartments.<br>Walk through each one.</h1><p>Open an apartment and scroll to move through it room by room, then reserve it with one message.</p></header>
- <section id="apartments" class="wrap"><div id="cards" class="grid"></div></section>
+ $('#app').innerHTML=`<section id="apartments" aria-label="Apartments"></section>
  <section id="contact" class="wrap"><h2>Talk to the owner</h2><div class="cg">
  <a href="tel:+961${CFG.phone}"><small>Call</small><b>${CFG.phone}</b></a>
  <a href="https://wa.me/${CFG.wa}" target="_blank" rel="noopener"><small>WhatsApp</small><b>+${CFG.wa}</b></a>
- <a href="mailto:${CFG.email}"><small>Email</small><b>${esc(CFG.email)}</b></a>
  <a href="${esc(CFG.placeUrl||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(CFG.place))}" target="_blank" rel="noopener"><small>Location</small><b>${esc(CFG.place)}</b></a></div></section>`;
- cards();
+ cards.h='';cards();
 }
 function showcase(id){
  const a=get(id);
- if(!a){$('#app').innerHTML=`<p class="wrap hero">${ready?'Apartment not found.':'Loading…'}</p>`;return}
- $('#app').innerHTML=`<a class="back" href="#home">‹ All apartments</a>
- <section class="film" id="film"><div class="stage"><div class="vw" id="vw"><video muted playsinline preload="auto" data-s="${esc(a.videoUrl)}"></video><canvas id="cv"></canvas><div class="ph">${a.videoUrl?'Loading':'Video coming soon'}</div>
+ if(!a){$('#app').innerHTML=`<p class="wrap nf">${ready?'Apartment not found.':'Loading…'}</p>`;return}
+ $('#app').innerHTML=`<section class="film" id="film"><div class="stage"><div class="vw" id="vw"><video muted playsinline preload="auto" data-s="${esc(a.videoUrl)}"></video><canvas id="cv"></canvas><div class="ph">${a.videoUrl?'Loading':'Video coming soon'}</div>
  <div class="ov2" id="ov2"><h1>${esc(a.name)}</h1><span class="id" style="color:#fff">${a.id}</span><span class="cue">Scroll to walk inside</span></div></div></div></section><i class="pg" id="pg"></i>
  <section class="info" id="info"></section>`;
  info(a);fx();
@@ -231,73 +245,27 @@ async function fx(){
 function info(a){
  const s=$('#info');if(!s)return;const l=a.location||{},m=mapUrl(a),t=taken(a);
  const st=[['Bedrooms',a.bedrooms],['Bathrooms',a.bathrooms],['Area',a.area!=null?a.area+' m²':null],['Floor',a.floor],['Location',l.address]].map(([k,v])=>v!=null&&v!==''?`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`:'').join('');
- s.innerHTML=`<div class="wrap"><div class="ih"><div><h2>${esc(a.name)}</h2><span class="id">${a.id}</span></div><div class="pr">${money(a)}<span class="bd ${t?'t':'v'}">${t?'Taken':'Available'}</span></div></div>
+ s.innerHTML=`<div class="wrap"><div class="ih"><div><h2>${esc(a.name)}</h2><span class="id">${a.id}</span></div><div class="pr"><span>${pHtml(a)}</span><span class="bd ${t?'t':'v'}">${t?'Taken':'Available'}</span></div></div>
  <dl class="st">${st}</dl><p class="ds">${esc(a.description)}</p>
  ${(a.facilities||[]).length?`<div class="fc">${a.facilities.map(f=>`<span>${esc(f)}</span>`).join('')}</div>`:''}
  ${(a.gallery||[]).length?`<div class="gl">${a.gallery.map(g=>`<img loading="lazy" src="${esc(ik(g,800))}" alt="">`).join('')}</div>`:''}
  <div class="bt">${m?`<a class="b2" target="_blank" rel="noopener" href="${esc(m)}">View on map</a>`:''}${t?`<button class="b1" disabled>THIS APARTMENT IS TAKEN</button>`:`<a class="b1" target="_blank" rel="noopener" href="${wa(a)}">Reserve this apartment</a>`}</div></div>`;
 }
-function admin(){
- const el=$('#app');
- if(!user)return el.innerHTML=`<div class="wrap lg"><h2>Admin sign in</h2><form id="lf"><input name="e" type="email" placeholder="Email" required autocomplete="username"><input name="p" type="password" placeholder="Password" required autocomplete="current-password"><button class="b1">Sign in</button><p id="le" class="er"></p></form></div>`;
- if(!isAdmin)return el.innerHTML=`<div class="wrap lg"><h2>Not authorised</h2><p>This account is not an administrator yet. In Firestore, add a document to the admins collection using this ID:</p><code>${user.uid}</code><button class="b2" data-a="out">Sign out</button></div>`;
- const miss=CFG.ids.filter(i=>!A[i]);
- el.innerHTML=`<div class="wrap"><div class="ah"><h2>Dashboard</h2><button class="b2" data-a="out">Sign out</button></div>
- ${miss.length?`<button class="b1" data-a="seed">Create ${miss.length} missing apartment${miss.length>1?'s':''}</button>`:''}
- <div class="al">${CFG.ids.map(i=>{const a=A[i];return a?`<div class="ar"><video muted playsinline preload="metadata" src="${esc(a.videoUrl)}#t=0.1"></video><div><b>${esc(a.name)}</b><span class="id">${i}</span><div>${money(a)}</div></div><label class="sw"><input type="checkbox" data-t="${i}" ${taken(a)?'':'checked'}><span></span><em>${taken(a)?'Taken':'Available'}</em></label><button class="b2" data-e="${i}">Edit</button></div>`:''}).join('')}</div></div>`;
-}
-function edit(id){
- const a=A[id],l=a.location||{};
- const f=(k,t,v,ty='text')=>`<label>${t}<input name="${k}" type="${ty}" value="${esc(v??'')}"${ty==='number'?' step="any"':''}></label>`;
- $('#dlg').innerHTML=`<form id="ef" data-id="${id}"><h3>Edit ${id}</h3>${f('name','Name',a.name)}<label>Description<textarea name="description" rows="3">${esc(a.description)}</textarea></label>
- <div class="g2">${f('price','Price',a.price,'number')}${f('currency','Currency',a.currency)}${f('bedrooms','Bedrooms',a.bedrooms,'number')}${f('bathrooms','Bathrooms',a.bathrooms,'number')}${f('area','Area (m²)',a.area,'number')}${f('floor','Floor',a.floor,'number')}</div>
- ${f('videoUrl','Video URL',a.videoUrl,'url')}
- <label>Gallery image URLs (one per line)<textarea name="gallery" rows="3">${esc((a.gallery||[]).join('\n'))}</textarea></label>
- ${f('address','Address',l.address)}${f('maps','Google Maps URL',l.googleMapsUrl,'url')}${f('facilities','Facilities (comma separated)',(a.facilities||[]).join(', '))}
- <div class="bt"><button type="button" class="b2" data-a="close">Cancel</button><button class="b1">Save changes</button></div></form>`;
- $('#dlg').showModal();
-}
-
 // ---- events ----
-document.addEventListener('submit',async e=>{
- e.preventDefault();const f=e.target;
- if(f.id==='lf'){try{await signInWithEmailAndPassword(auth,f.e.value,f.p.value)}catch{$('#le').textContent='Wrong email or password.'}}
- if(f.id==='ef'){
-  const id=f.dataset.id,fd=new FormData(f),g=k=>(fd.get(k)||'').trim(),n=k=>g(k)===''?0:Number(g(k));
-  try{await updateDoc(doc(db,'apartments',id),{name:g('name'),description:g('description'),price:n('price'),currency:g('currency')||'USD',bedrooms:n('bedrooms'),bathrooms:n('bathrooms'),area:n('area'),floor:n('floor'),videoUrl:g('videoUrl'),gallery:g('gallery').split('\n').map(s=>s.trim()).filter(Boolean),facilities:g('facilities').split(',').map(s=>s.trim()).filter(Boolean),location:{...(A[id].location||{}),address:g('address'),googleMapsUrl:g('maps')},updatedAt:serverTimestamp()});$('#dlg').close();toast('Saved')}
-  catch(x){toast('Save failed: check your permissions');console.error(x)}
- }
-});
-document.addEventListener('change',async e=>{
- const id=e.target.dataset.t;if(!id)return;
- try{await updateDoc(doc(db,'apartments',id),{status:e.target.checked?'available':'taken',updatedAt:serverTimestamp()})}
- catch{e.target.checked=!e.target.checked;toast('Could not update status')}
-});
-document.addEventListener('click',async e=>{
- const b=e.target.closest('[data-a],[data-e],#nav button');if(!b)return;
- if(b.dataset.e)return edit(b.dataset.e);
- if(b.dataset.a==='close')return $('#dlg').close();
- if(b.dataset.a==='out')return signOut(auth);
- if(b.dataset.a==='seed'){
-  for(const id of CFG.ids.filter(i=>!A[i]))await setDoc(doc(db,'apartments',id),{id,name:'Apartment '+id.slice(-1),description:'',price:0,currency:'USD',bedrooms:0,bathrooms:0,area:0,floor:0,status:'available',coverImage:'',videoUrl:CFG.videos[id]||'',gallery:[],facilities:[],location:{address:'',googleMapsUrl:'',latitude:null,longitude:null},createdAt:serverTimestamp(),updatedAt:serverTimestamp()}).catch(()=>toast('Could not create apartment'));
-  return;
- }
- const k=b.dataset.k;if(!k)return;
- if(k==='admin')return location.hash='#admin';
+document.addEventListener('click',e=>{
+ const b=e.target.closest('#nav button,#top [data-k]');if(!b)return;
+ const k=b.dataset.k;
  if(cur!=='home'){pend=k;location.hash='#home'}else go(k);
 });
-function go(k){const t=k==='home'?0:$('#'+k).offsetTop-16;scrollTo({top:t})}
+function go(k){const t=k==='home'?0:$('#'+k).offsetTop-96;scrollTo({top:t})}
 
-document.addEventListener('mouseover',e=>{const v=e.target.closest('.card')?.querySelector('video');v&&v.play().catch(()=>{})});
-const pre=e=>{const c=e.target.closest('.card'),a=c&&get(c.getAttribute('href').slice(2));if(a?.videoUrl)blob(a.videoUrl).catch(()=>{})};
+const pre=e=>{const c=e.target.closest('.ap'),a=c&&get(c.getAttribute('href').slice(2));if(a?.videoUrl)blob(a.videoUrl).catch(()=>{})};
 document.addEventListener('mouseover',pre);document.addEventListener('touchstart',pre,{passive:true});
-document.addEventListener('mouseout',e=>{const c=e.target.closest('.card');if(c&&!c.contains(e.relatedTarget)){const v=c.querySelector('video');if(v){v.pause();v.currentTime=.1}}});
 // ---- router + nav ----
-function refresh(){if(cur==='home')cards();else if(cur==='show'){const a=get(location.hash.slice(2));if(a&&$('#info'))info(a);else showcase(location.hash.slice(2))}else if(cur==='admin')admin()}
+function refresh(){if(cur==='home')cards();else if(cur==='show'){const a=get(location.hash.slice(2));if(a&&$('#info'))info(a);else showcase(location.hash.slice(2))}}
 function route(){
  const h=location.hash;
  if(h.startsWith('#/')){cur='show';showcase(h.slice(2))}
- else if(h==='#admin'){cur='admin';admin()}
  else{cur='home';home()}
  sec=cur==='home'?'home':sec;
  if(pend&&cur==='home'){const k=pend;pend=null;requestAnimationFrame(()=>go(k))}else scrollTo({top:0,behavior:'instant'});
@@ -306,13 +274,14 @@ function route(){
 function nav(){
  document.body.dataset.v=cur;
  const nv=$('#nav'),vis=[...nv.querySelectorAll('button')].filter(b=>!b.hidden);
- const k=cur==='admin'?'admin':cur==='show'?'apartments':sec;
+ const k=cur==='show'?'home':sec;
  vis.forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+ document.querySelectorAll('#top .lk [data-k]').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
  nv.style.setProperty('--n',vis.length);nv.style.setProperty('--i',Math.max(0,vis.findIndex(b=>b.dataset.k===k)));
 }
 let tick=0;
 addEventListener('scroll',()=>{if(tick)return;tick=requestAnimationFrame(()=>{tick=0;
- if(cur==='home'&&$('#contact')){const y=scrollY+innerHeight*.4,s=y>=$('#contact').offsetTop?'contact':y>=$('#apartments').offsetTop?'apartments':'home';if(s!==sec){sec=s;nav()}}
+ if(cur==='home'&&$('#contact')){const y=scrollY+innerHeight*.4,s=y>=$('#contact').offsetTop||innerHeight+scrollY>=document.documentElement.scrollHeight-4?'contact':'home';if(s!==sec){sec=s;nav()}}
 })},{passive:true});
 addEventListener('hashchange',route);
 route();
@@ -322,7 +291,7 @@ Firestore security rules (paste in Firebase console > Firestore > Rules):
 rules_version='2';
 service cloud.firestore{match /databases/{d}/documents{
  function isAdmin(){return request.auth!=null&&exists(/databases/$(d)/documents/admins/$(request.auth.uid));}
- match /apartments/{id}{allow read:if true;allow create,update:if isAdmin()&&id in ['APT-001','APT-002','APT-003','APT-004'];allow delete:if false;}
+ match /apartments/{id}{allow read:if true;allow create,update:if isAdmin()&&id in ['APT-001','APT-002'];allow delete:if false;}
  match /admins/{uid}{allow read:if request.auth!=null&&request.auth.uid==uid;allow write:if false;}
 }}
 -->
