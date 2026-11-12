@@ -19,7 +19,7 @@
 --ease:cubic-bezier(.22,.8,.24,1);--sa:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px);
 --dp:'Cormorant Garamond','Iowan Old Style','Palatino Linotype',Georgia,serif;--sn:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{font:500 16px/1.6 var(--sn);color:var(--tx);background:var(--iv);-webkit-font-smoothing:antialiased;overflow-x:clip;padding-bottom:calc(96px + var(--sa))}
 body.nsc{overflow:hidden}
 img,video,canvas,svg{display:block;max-width:100%}
@@ -102,7 +102,7 @@ body[data-v=show] .bk{display:inline-flex}
 @keyframes cue{0%{transform:translateY(0);opacity:1}70%{transform:translateY(14px);opacity:0}100%{opacity:0}}
 @media(min-width:900px) and (min-height:720px){.cue{display:block}}
 @keyframes glow{0%,100%{opacity:.25}50%{opacity:1}}
-.hero .gl1,.hero .gl2,.hero .gl3{animation:glow 5s ease-in-out infinite}
+@media(hover:hover) and (pointer:fine){.hero .gl1,.hero .gl2,.hero .gl3{animation:glow 5s ease-in-out infinite}}
 .hero .gl2{animation-delay:1.6s}.hero .gl3{animation-delay:3.1s}
 
 /* ---------- apartments section ---------- */
@@ -120,16 +120,17 @@ body[data-v=show] .bk{display:inline-flex}
 .md:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,43,36,.4) 0%,transparent 30%,transparent 62%,rgba(14,43,36,.5) 100%);pointer-events:none}
 .ph0{position:absolute;inset:0;display:grid;place-items:center;color:rgba(198,166,107,.5)}
 .ph0 svg{width:60px;height:60px;stroke-width:1.2}
-.ap.tk .md img,.ap.tk .md video{filter:grayscale(.8) brightness(.93)}
+.ap.tk .md img{filter:grayscale(.8) brightness(.93)}.ap.tk .md video.rd{opacity:.78}
 .bd{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 12px;border-radius:999px;font:700 12.5px/1 var(--sn);white-space:nowrap}
 .bd i{width:8px;height:8px;border-radius:50%;flex:none}
 .bd.v{background:rgba(27,107,79,.94);color:#fff}
-.bd.v i{background:#7EF0B7;animation:pu 2.2s ease-out infinite}
+.bd.v i{background:#7EF0B7}
+@media(hover:hover) and (pointer:fine){.bd.v i{animation:pu 2.2s ease-out infinite}}
 .bd.t{background:rgba(236,233,225,.94);color:#5b625d}
 .bd.t i{background:#9aa09b}
 @keyframes pu{0%{box-shadow:0 0 0 0 rgba(126,240,183,.7)}80%,100%{box-shadow:0 0 0 8px rgba(126,240,183,0)}}
-.md .bd{position:absolute;z-index:2;top:16px;left:16px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.idc{position:absolute;z-index:2;top:16px;right:16px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font:700 11.5px/1 var(--sn);letter-spacing:.08em;border:1px solid rgba(255,255,255,.2)}
+.md .bd{position:absolute;z-index:2;top:16px;left:16px}
+.idc{position:absolute;z-index:2;top:16px;right:16px;padding:8px 12px;border-radius:999px;background:rgba(14,43,36,.45);color:#fff;font:700 11.5px/1 var(--sn);letter-spacing:.08em;border:1px solid rgba(255,255,255,.2)}
 .bo{display:flex;flex-direction:column;gap:14px;padding:22px 24px 22px;flex:1;min-width:0}
 .bo h3{font:600 clamp(28px,3.2vw,34px)/1.04 var(--dp);color:var(--fg);overflow-wrap:anywhere;letter-spacing:-.01em}
 .lc{display:flex;align-items:center;gap:6px;color:var(--mt);font-size:14px;font-weight:600;margin-top:-6px;min-width:0}
@@ -346,7 +347,7 @@ a.cc:hover{background:rgba(255,255,255,.13);transform:translateX(4px)}
 @media(max-height:720px) and (max-width:899px){.hf{display:none}.hero{padding-top:96px}.hero h1{margin:16px 0 16px}.hb{margin-top:24px}}
 
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.js .rv{opacity:1;transform:none}}
-@media(pointer:coarse){#top,#nav{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}}
+@media(pointer:coarse){#top,#nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(247,245,240,.97)}}
 body[data-v=show] #top,body[data-v=show] #nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(247,245,240,.95)}
 </style>
 </head>
@@ -695,8 +696,8 @@ async function fx(src){
  if(!ok())return;if(have()<coarse.length*.85)return bail('frames');
  // free the decoder: from here on nothing but cheap canvas drawing happens while scrolling
  if(hq){try{v.pause();v.removeAttribute('src');v.load()}catch{}}
- cv.width=W;cv.height=H;const x=cv.getContext('2d',{alpha:false,desynchronized:true});x.imageSmoothingQuality='high';
- const cib=b=>createImageBitmap(b,{premultiplyAlpha:'none',colorSpaceConversion:'none'}).catch(()=>createImageBitmap(b));
+ cv.width=W;cv.height=H;const x=cv.getContext('2d',{alpha:false});x.imageSmoothingQuality='high';
+ const cib=b=>createImageBitmap(b);
  const want=i=>{if(J[i]&&!B[i])B[i]=cib(J[i]).then(b=>{if(!ok()){b.close();return}R[i]=b;dirty=1}).catch(()=>{})};
  // keep decoded frames mostly in the direction you are scrolling; decode nearest first, a few per tick
  const around=(p,dr)=>{const c=Math.round(p),fw=dr<0?5:16,bk=dr<0?16:5;let n=0;
