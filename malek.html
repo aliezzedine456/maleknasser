@@ -219,7 +219,7 @@ a.cc:hover{background:rgba(255,255,255,.13);transform:translateX(4px)}
 .nvb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;color:#fff;background:radial-gradient(120% 80% at 50% 30%,var(--fg3),var(--fg2))}
 .nvb .ic{width:52px;height:52px;color:var(--au);stroke-width:1.2}
 .nvb h1{font:600 clamp(36px,9vw,64px)/1 var(--dp)}
-.pg{position:fixed;z-index:70;left:0;top:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--au),var(--au2));pointer-events:none}
+.pg{will-change:transform;position:fixed;z-index:70;left:0;top:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--au),var(--au2));pointer-events:none}
 .film.ld~.pg,.film.pl~.pg,.film.nv~.pg{opacity:0}
 
 @media(min-width:900px) and (min-aspect-ratio:7/10){
@@ -669,10 +669,10 @@ async function fx(src){
  v.src=u;
  const loaded=await new Promise(r=>{let d=0;const f=x=>{if(!d){d=1;r(x)}};v.addEventListener('loadeddata',()=>f(1),{once:true});v.addEventListener('error',()=>f(0),{once:true});setTimeout(()=>f(0),10000)});
  if(!ok())return;const D=v.duration;if(!loaded||!D||!isFinite(D)||!v.videoWidth)return bail('decode');
- const hq=fine.matches,E=D-.06,N=Math.min(300,Math.round(D*15)),W=Math.min(v.videoWidth,hq?900:720),H=Math.round(W*v.videoHeight/v.videoWidth);
+ const hq=fine.matches,E=D-.06,N=Math.min(240,Math.round(D*12)),W=Math.min(v.videoWidth,hq?810:720),H=Math.round(W*v.videoHeight/v.videoWidth);
  const J=(FC.get(src)||{J:[]}).J;lru(FC,src,{J},2);
- const coarse=[];for(let i=0;i<N;i+=4)coarse.push(i);if(coarse[coarse.length-1]!==N-1)coarse.push(N-1);
- const rest=[];for(let i=0;i<N;i++)if(i%4&&i!==N-1)rest.push(i);rest.sort((a,b)=>(a%2)-(b%2)||a-b);
+ const coarse=[];for(let i=0;i<N;i++)coarse.push(i);
+ const rest=[];
  const order=[...coarse,...rest].filter(i=>!J[i]),have=()=>coarse.reduce((n,i)=>n+(J[i]?1:0),0);
  const R={},B={};let dirty=1,moving=0,nxt=0,fin=0;
  const vids=order.length?(hq?[]:[v]):[];
@@ -685,30 +685,32 @@ async function fx(src){
   while(ok()&&nxt<order.length){
    if(moving){await nap(90);continue}
    const i=order[nxt++];await seek(.001+i/(N-1)*E);if(!ok())break;
-   try{k.drawImage(w,0,0,W,H);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.85));if(b){J[i]=b;dirty=1}}catch{}
+   try{k.drawImage(w,0,0,W,H);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.82));if(b){J[i]=b;dirty=1}}catch{}
   }
   if(w!==v){w.removeAttribute('src');w.load()}
  };
  onTear(()=>{nxt=1e9});
  Promise.all(vids.map(run)).then(()=>{fin=1});
  await new Promise(res=>{let t;const z=()=>{const h=have();setP(.5+.5*h/coarse.length,'Preparing your tour '+Math.round(h/coarse.length*100)+'%');if(h>=coarse.length||fin||!ok()){clearInterval(t);res()}};t=setInterval(z,60);z()});
- if(!ok())return;if(have()<coarse.length)return bail('frames');
- cv.width=W;cv.height=H;const x=cv.getContext('2d',{alpha:false});x.imageSmoothingQuality='high';
- const back=hq?5:3;
- const want=i=>{if(J[i]&&!B[i])B[i]=createImageBitmap(J[i]).then(b=>{if(!ok()){b.close();return}R[i]=b;dirty=1}).catch(()=>{})};
- // decode only a few frames per tick, nearest first, so scrolling never stalls on decoding
- const around=p=>{const c=Math.round(p);let n=0;
-  for(let d=0;d<=10&&n<4;d++)for(const i of d?[c+d,c-d]:[c]){if(i<0||i>=N||(i<c&&d>back)||!J[i]||B[i])continue;n++;want(i)}
-  for(const k in R)if(k<c-back-4||k>c+16){R[k].close();delete R[k];delete B[k]}};
+ if(!ok())return;if(have()<coarse.length*.85)return bail('frames');
+ // free the decoder: from here on nothing but cheap canvas drawing happens while scrolling
+ if(hq){try{v.pause();v.removeAttribute('src');v.load()}catch{}}
+ cv.width=W;cv.height=H;const x=cv.getContext('2d',{alpha:false,desynchronized:true});x.imageSmoothingQuality='high';
+ const cib=b=>createImageBitmap(b,{premultiplyAlpha:'none',colorSpaceConversion:'none'}).catch(()=>createImageBitmap(b));
+ const want=i=>{if(J[i]&&!B[i])B[i]=cib(J[i]).then(b=>{if(!ok()){b.close();return}R[i]=b;dirty=1}).catch(()=>{})};
+ // keep decoded frames mostly in the direction you are scrolling; decode nearest first, a few per tick
+ const around=(p,dr)=>{const c=Math.round(p),fw=dr<0?5:16,bk=dr<0?16:5;let n=0;
+  for(let d=0;d<=16&&n<6;d++)for(const i of d?[c+d,c-d]:[c]){const o=i-c;if(i<0||i>=N||o>fw||-o>bk||!J[i]||B[i])continue;n++;want(i)}
+  for(const k in R)if(k-c>fw+4||c-k>bk+4){R[k].close();delete R[k];delete B[k]}};
  onTear(()=>{for(const k in R){try{R[k].close()}catch{}delete R[k]}});
  // always show ONE real frame (the nearest one). No cross-fading between frames, so nothing looks blurry or ghosted.
  let drawn=-1;
- const draw=t=>{const p=Math.max(0,Math.min(N-1,t/E*(N-1)));around(p);const c=Math.round(p),sg=p>=c?1:-1;let k=-1;
+ const draw=(t,dr)=>{const p=Math.max(0,Math.min(N-1,t/E*(N-1)));around(p,dr);const c=Math.round(p),sg=p>=c?1:-1;let k=-1;
   for(let d=0;d<=12&&k<0;d++){if(R[c+sg*d])k=c+sg*d;else if(R[c-sg*d])k=c-sg*d}
   if(k<0||k===drawn)return;x.drawImage(R[k],0,0);drawn=k};
- around(0);await Promise.all([0,4,8].map(i=>B[i]).filter(Boolean));
+ around(0,1);await Promise.all([0,1,2,3].map(i=>B[i]).filter(Boolean));
  if(!ok())return;
- draw(0);cv.style.opacity=1;
+ draw(0,1);cv.style.opacity=1;
  film.classList.remove('ld');film.style.height=Math.min(800,Math.max(350,D*45))+'vh';
  ld.classList.add('out');const ldT=setTimeout(()=>ld.remove(),800);onTear(()=>clearTimeout(ldT));
  let vt=0,last=-1,top=0,span=1,lastPct=-1,lt=performance.now();
@@ -719,13 +721,13 @@ async function fx(src){
  const loop=now=>{
   const dt=Math.min(.05,Math.max(.001,(now-lt)/1000));lt=now;
   const p=Math.min(1,Math.max(0,(scrollY-top)/span)),t=p*E;
-  vt+=(t-vt)*(1-Math.exp(-dt*9)); // same easing on 60 Hz and 120 Hz screens
+  const dr=t>=vt?1:-1;vt+=(t-vt)*(1-Math.exp(-dt*9)); // same easing on 60 Hz and 120 Hz screens
   if(Math.abs(t-vt)<.0004)vt=t;
   pg.style.transform=`scaleX(${p})`;if(pgb)pgb.style.transform=`scaleY(${p})`;
   const pc=Math.round(p*100);if(pc!==lastPct){lastPct=pc;if(pn)pn.textContent=pc+'%'}
   if(ov)ov.style.opacity=1-Math.min(1,p*8);
   moving=Math.abs(t-vt)>.002?1:0;
-  if(Math.abs(vt-last)>1e-5||dirty){draw(vt);last=vt;dirty=0}
+  if(Math.abs(vt-last)>1e-5||dirty){draw(vt,dr);last=vt;dirty=0}
   raf=requestAnimationFrame(loop)};
  raf=requestAnimationFrame(loop);
 }
