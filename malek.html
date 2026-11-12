@@ -675,9 +675,9 @@ async function fx(src){
  const coarse=[];for(let i=0;i<N;i++)coarse.push(i);
  const rest=[];
  const order=[...coarse,...rest].filter(i=>!J[i]),have=()=>coarse.reduce((n,i)=>n+(J[i]?1:0),0);
- const R={},B={};let dirty=1,moving=0,nxt=0,fin=0;
- const vids=order.length?(hq?[]:[v]):[];
- for(const K=hq?3:2;order.length&&vids.length<K;){const e=document.createElement('video');e.muted=true;e.playsInline=true;e.preload='auto';e.src=u;vids.push(e)}
+ const R={},B={},P={};let dirty=1,moving=0,nxt=0,fin=0;
+ // ONE decoder, strictly in order. (Several decoders each handing out alternate frames can disagree by a few frames, which made the picture jump back and forth.)
+ const vids=order.length?[v]:[];
  const nap=ms=>new Promise(r=>setTimeout(r,ms));
  const run=async w=>{
   if(w!==v)await new Promise(r=>{w.addEventListener('loadeddata',r,{once:true});w.addEventListener('error',r,{once:true});setTimeout(r,8000)});
@@ -693,7 +693,31 @@ async function fx(src){
   if(w!==v){w.removeAttribute('src');w.load()}
  };
  onTear(()=>{nxt=1e9});
- Promise.all(vids.map(run)).then(()=>{fin=1});
+ // Main method: play the video quickly once and take each picture together with the exact time the browser says it belongs to.
+ // That time stamp makes the order exact. The old seek-and-grab method below is only used for any frames this misses.
+ const capture=()=>new Promise(res=>{
+  const w=document.createElement('video');w.muted=true;w.playsInline=true;w.setAttribute('playsinline','');w.preload='auto';w.src=u;
+  w.style.cssText='position:fixed;left:0;top:0;width:4px;height:4px;opacity:.02;pointer-events:none;z-index:-1';document.body.append(w);
+  const c=document.createElement('canvas');c.width=W;c.height=H;const k=c.getContext('2d');k.imageSmoothingQuality='high';
+  let done=0,last=performance.now(),wd=0;
+  const end=()=>{if(done)return;done=1;clearInterval(wd);try{w.pause();w.removeAttribute('src');w.load();w.remove()}catch{}res()};
+  onTear(end);
+  wd=setInterval(()=>{if(performance.now()-last>3500||!ok())end()},500);
+  const cb=(t,md)=>{if(done)return;last=performance.now();
+   const i=Math.min(N-1,Math.max(0,Math.round(md.mediaTime/E*(N-1))));
+   if(!J[i]&&!P[i]){P[i]=1;try{k.drawImage(w,0,0,W,H);c.toBlob(b=>{if(b){J[i]=b;dirty=1}else P[i]=0},'image/jpeg',.82)}catch{P[i]=0}}
+   w.requestVideoFrameCallback(cb)};
+  w.addEventListener('ended',end);w.addEventListener('error',end);
+  w.requestVideoFrameCallback(cb);
+  w.playbackRate=2;w.play().catch(end);
+ });
+ (async()=>{
+  try{
+   if(order.length&&'requestVideoFrameCallback' in HTMLVideoElement.prototype){await capture();await nap(500)}
+   if(ok()){const miss=[];for(let i=0;i<N;i++)if(!J[i])miss.push(i);
+    if(miss.length>N*.1){order.length=0;order.push(...miss);nxt=0;await Promise.all(vids.map(run))}}
+  }catch{}
+  fin=1})();
  await new Promise(res=>{let t;const z=()=>{const h=have();setP(.5+.5*h/coarse.length,'Preparing your tour '+Math.round(h/coarse.length*100)+'%');if(h>=coarse.length||fin||!ok()){clearInterval(t);res()}};t=setInterval(z,60);z()});
  if(!ok())return;if(have()<coarse.length*.85)return bail('frames');
  // free the decoder: from here on nothing but cheap canvas drawing happens while scrolling
