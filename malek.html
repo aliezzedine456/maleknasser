@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Malek Homes – Premium apartments for rent</title>
-<meta name="description" content="Malek Homes: handpicked apartments for rent with immersive video tours, live availability and direct contact with the owner.">
+<meta name="description" content="Malek Homes: apartments owned by Malek, available for rent with immersive video tours, live availability and direct contact with the owner.">
 <meta name="theme-color" content="#173F35">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23173F35'/%3E%3Cpath d='M7 16.5L16 8l9 8.5M10 15v9h12v-9' fill='none' stroke='%23C6A66B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,7 +80,7 @@ body[data-v=show] .bk{display:inline-flex}
 
 /* ---------- bottom navigation (phones/tablets) ---------- */
 #nav{position:fixed;left:50%;bottom:calc(12px + var(--sa));transform:translateX(-50%);width:min(calc(100% - 24px),440px);height:68px;padding:6px;z-index:55;display:flex;border-radius:999px;background:rgba(247,245,240,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(23,63,53,.1);box-shadow:0 12px 34px rgba(14,43,36,.2);--i:0}
-#bub{position:absolute;left:6px;top:6px;width:calc((100% - 12px)/4);height:calc(100% - 12px);border-radius:999px;background:var(--fg);transform:translateX(calc(var(--i)*100%));transition:transform .5s var(--ease);box-shadow:0 6px 16px rgba(23,63,53,.35)}
+#bub{position:absolute;left:0;top:0;width:0;height:0;border-radius:999px;background:var(--fg);transform:translateX(0);transition:transform .5s var(--ease),width .5s var(--ease);box-shadow:0 6px 16px rgba(23,63,53,.35)}
 #nav .it{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:700 11px/1 var(--sn);color:var(--mt);border-radius:999px;transition:color .3s;-webkit-user-select:none;user-select:none}
 #nav .it svg{width:22px;height:22px}
 #nav .it.on{color:#fff}
@@ -192,9 +192,9 @@ a.cc:hover{background:rgba(255,255,255,.13);transform:translateX(4px)}
 .film.nv{height:auto;min-height:72svh}
 .stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
 .film.nv .stage{position:relative;height:72svh}
-.vw{position:relative;width:100%;height:100%;overflow:hidden;background:#0b211b}
+.vw{position:relative;width:100%;height:100%;overflow:hidden;background:#0b211b;contain:layout paint}
 .vw video,.vw canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-#cv{opacity:0}
+#cv{opacity:0;transform:translateZ(0)}
 .side,.rail{display:none}
 .ov2{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;padding:0 24px calc(122px + var(--sa));pointer-events:none;color:#fff;background:linear-gradient(transparent 50%,rgba(14,43,36,.72))}
 .ov2 h1{font:600 clamp(40px,12vw,76px)/.95 var(--dp);letter-spacing:-.015em;overflow-wrap:anywhere}
@@ -428,7 +428,7 @@ body[data-v=show] #top,body[data-v=show] #nav{-webkit-backdrop-filter:none;backd
  <div class="wrap"><div class="hc">
   <span class="eb">Premium apartments for rent</span>
   <h1 id="hh">Find your <em>next home</em></h1>
-  <p class="lead">Handpicked apartments, presented as immersive video tours. Scroll through each one as if you were walking in, then reserve directly with the owner.</p>
+  <p class="lead">Malek's own apartments, presented as immersive video tours. Scroll through each one as if you were walking in, then reserve directly with Malek.</p>
   <div class="hb">
    <button class="btn btn-g" data-k="apartments" type="button">Explore apartments<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
    <button class="btn btn-o" data-k="contact" type="button"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>Talk to the owner</button>
@@ -571,7 +571,7 @@ function home(){
  vobs();
  $('#app').innerHTML=`${$('#tpl-hero').innerHTML}
  <section class="apts" id="apartments" aria-labelledby="ah"><div class="wrap">
-  <div class="sh rv"><div><span class="eb d">Our apartments</span><h2 id="ah">Choose the home that feels right</h2></div><p id="cnt">Tap an apartment to take a video walk-through.</p></div>
+  <div class="sh rv"><div><span class="eb d">Malek's apartments</span><h2 id="ah">Choose the home that feels right</h2></div><p id="cnt">Tap an apartment to take a video walk-through.</p></div>
   <div class="grid" id="grid" aria-live="polite"></div></div></section>
  <section class="ct" id="contact" aria-labelledby="ch"><div class="wrap"><div class="cp rv"><div><span class="eb">Contact</span><h2 id="ch">Talk to the owner</h2><p class="lead">Questions about availability, a viewing or the rental terms? Reach out directly and get a quick answer.</p></div><div class="cl2" id="cl2"></div></div></div></section>${footer()}`;
  ch='';for(const k in gh)delete gh[k];
@@ -669,7 +669,7 @@ async function fx(src){
  v.src=u;
  const loaded=await new Promise(r=>{let d=0;const f=x=>{if(!d){d=1;r(x)}};v.addEventListener('loadeddata',()=>f(1),{once:true});v.addEventListener('error',()=>f(0),{once:true});setTimeout(()=>f(0),10000)});
  if(!ok())return;const D=v.duration;if(!loaded||!D||!isFinite(D)||!v.videoWidth)return bail('decode');
- const hq=fine.matches,E=D-.06,N=Math.min(120,Math.round(D*12)),W=hq?720:540,H=Math.round(W*v.videoHeight/v.videoWidth);
+ const hq=fine.matches,E=D-.06,N=Math.min(300,Math.round(D*15)),W=Math.min(v.videoWidth,hq?900:720),H=Math.round(W*v.videoHeight/v.videoWidth);
  const J=(FC.get(src)||{J:[]}).J;lru(FC,src,{J},2);
  const coarse=[];for(let i=0;i<N;i+=4)coarse.push(i);if(coarse[coarse.length-1]!==N-1)coarse.push(N-1);
  const rest=[];for(let i=0;i<N;i++)if(i%4&&i!==N-1)rest.push(i);rest.sort((a,b)=>(a%2)-(b%2)||a-b);
@@ -685,7 +685,7 @@ async function fx(src){
   while(ok()&&nxt<order.length){
    if(moving){await nap(90);continue}
    const i=order[nxt++];await seek(.001+i/(N-1)*E);if(!ok())break;
-   try{k.drawImage(w,0,0,W,H);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.88));if(b){J[i]=b;dirty=1}}catch{}
+   try{k.drawImage(w,0,0,W,H);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.85));if(b){J[i]=b;dirty=1}}catch{}
   }
   if(w!==v){w.removeAttribute('src');w.load()}
  };
@@ -693,45 +693,51 @@ async function fx(src){
  Promise.all(vids.map(run)).then(()=>{fin=1});
  await new Promise(res=>{let t;const z=()=>{const h=have();setP(.5+.5*h/coarse.length,'Preparing your tour '+Math.round(h/coarse.length*100)+'%');if(h>=coarse.length||fin||!ok()){clearInterval(t);res()}};t=setInterval(z,60);z()});
  if(!ok())return;if(have()<coarse.length)return bail('frames');
- cv.width=W;cv.height=H;const x=cv.getContext('2d');
+ cv.width=W;cv.height=H;const x=cv.getContext('2d',{alpha:false});x.imageSmoothingQuality='high';
+ const back=hq?5:3;
  const want=i=>{if(J[i]&&!B[i])B[i]=createImageBitmap(J[i]).then(b=>{if(!ok()){b.close();return}R[i]=b;dirty=1}).catch(()=>{})};
- const around=p=>{const c=Math.floor(p);for(let i=Math.max(0,c-6);i<=Math.min(N-1,c+12);i++)want(i);for(const k in R)if(k<c-18||k>c+24){R[k].close();delete R[k];delete B[k]}};
+ // decode only a few frames per tick, nearest first, so scrolling never stalls on decoding
+ const around=p=>{const c=Math.round(p);let n=0;
+  for(let d=0;d<=10&&n<4;d++)for(const i of d?[c+d,c-d]:[c]){if(i<0||i>=N||(i<c&&d>back)||!J[i]||B[i])continue;n++;want(i)}
+  for(const k in R)if(k<c-back-4||k>c+16){R[k].close();delete R[k];delete B[k]}};
  onTear(()=>{for(const k in R){try{R[k].close()}catch{}delete R[k]}});
- const draw=t=>{const p=Math.max(0,Math.min(N-1,t/E*(N-1)));around(p);let lo=-1,hi=-1;const c=Math.floor(p),e=Math.ceil(p);
-  for(let d=0;d<=10&&lo<0;d++)if(R[c-d])lo=c-d;
-  for(let d=0;d<=10&&hi<0;d++)if(R[e+d])hi=e+d;
-  if(lo<0&&hi<0)return;if(lo<0)lo=hi;if(hi<0)hi=lo;
-  x.globalAlpha=1;x.drawImage(R[lo],0,0);
-  if(hi>lo&&p>lo){const a=(p-lo)/(hi-lo);if(a>.02){x.globalAlpha=a;x.drawImage(R[hi],0,0)}}};
- around(0);await Promise.all([0,1,2].map(i=>B[i]));
+ // always show ONE real frame (the nearest one). No cross-fading between frames, so nothing looks blurry or ghosted.
+ let drawn=-1;
+ const draw=t=>{const p=Math.max(0,Math.min(N-1,t/E*(N-1)));around(p);const c=Math.round(p),sg=p>=c?1:-1;let k=-1;
+  for(let d=0;d<=12&&k<0;d++){if(R[c+sg*d])k=c+sg*d;else if(R[c-sg*d])k=c-sg*d}
+  if(k<0||k===drawn)return;x.drawImage(R[k],0,0);drawn=k};
+ around(0);await Promise.all([0,4,8].map(i=>B[i]).filter(Boolean));
  if(!ok())return;
  draw(0);cv.style.opacity=1;
  film.classList.remove('ld');film.style.height=Math.min(800,Math.max(350,D*45))+'vh';
  ld.classList.add('out');const ldT=setTimeout(()=>ld.remove(),800);onTear(()=>clearTimeout(ldT));
- let vt=0,idle=0,shown=1,last=-1,top=0,span=1,lastPct=-1;
- const m=()=>{top=film.offsetTop;span=Math.max(1,film.offsetHeight-innerHeight)};m();addEventListener('resize',m);onTear(()=>removeEventListener('resize',m));
- const pg=$('#pg'),pgb=$('#pgb'),pn=$('#pn'),ov=$('#ov2'),hide=()=>{cv.style.transition='opacity .2s';cv.style.opacity=0;shown=0};
- if(hq){const sk=()=>{if(idle>=5&&shown)hide()};v.addEventListener('seeked',sk);onTear(()=>v.removeEventListener('seeked',sk))}
- const loop=()=>{
+ let vt=0,last=-1,top=0,span=1,lastPct=-1,lt=performance.now();
+ const stage=film.querySelector('.stage');
+ // the stage is 100svh (constant), so the mobile address bar showing/hiding can't make the progress jump
+ const m=()=>{top=film.offsetTop;span=Math.max(1,film.offsetHeight-stage.offsetHeight)};m();addEventListener('resize',m);onTear(()=>removeEventListener('resize',m));
+ const pg=$('#pg'),pgb=$('#pgb'),pn=$('#pn'),ov=$('#ov2');
+ const loop=now=>{
+  const dt=Math.min(.05,Math.max(.001,(now-lt)/1000));lt=now;
   const p=Math.min(1,Math.max(0,(scrollY-top)/span)),t=p*E;
-  vt+=(t-vt)*.14;
+  vt+=(t-vt)*(1-Math.exp(-dt*9)); // same easing on 60 Hz and 120 Hz screens
+  if(Math.abs(t-vt)<.0004)vt=t;
   pg.style.transform=`scaleX(${p})`;if(pgb)pgb.style.transform=`scaleY(${p})`;
   const pc=Math.round(p*100);if(pc!==lastPct){lastPct=pc;if(pn)pn.textContent=pc+'%'}
   if(ov)ov.style.opacity=1-Math.min(1,p*8);
   moving=Math.abs(t-vt)>.002?1:0;
-  if(moving){idle=0;if(!shown){cv.style.transition='none';cv.style.opacity=1;shown=1}if(Math.abs(vt-last)>.0005||dirty){draw(vt);last=vt;dirty=0}}
-  else if(dirty&&shown){draw(vt);dirty=0}
-  else if(hq){idle++;if(idle>=5&&!v.seeking){if(Math.abs(v.currentTime-vt)>.012)v.currentTime=vt;else if(shown)hide()}}
+  if(Math.abs(vt-last)>1e-5||dirty){draw(vt);last=vt;dirty=0}
   raf=requestAnimationFrame(loop)};
- loop();
+ raf=requestAnimationFrame(loop);
 }
 
 // ---------- apartment information ----------
+// "Label: value" lines added in the admin panel
+const exd=a=>(Array.isArray(a.details)?a.details:[]).map(x=>String(x).trim()).filter(Boolean).map(x=>{const i=x.indexOf(':');return i>0&&i<40?['key',x.slice(0,i).trim(),x.slice(i+1).trim()]:['check','Detail',x]});
 function info(a){
  const s=$('#info');if(!s)return;
  if(state==='loading'&&!A[a.id]){s.innerHTML=`<div class="wrap isk" aria-hidden="true"><i class="sk" style="height:60px;width:min(420px,80%)"></i><i class="sk" style="height:200px;border-radius:28px;margin-top:20px"></i><i class="sk" style="height:110px"></i><i class="sk" style="height:140px"></i></div>`;return}
  const l=a.location||{},m=mapUrl(a)||placeMap(),t=taken(a);
- const stats=[['bed','Bedrooms',a.bedrooms>0?a.bedrooms:''],['bath','Bathrooms',a.bathrooms>0?a.bathrooms:''],['area','Area',a.area>0?a.area+' m²':''],['floor','Floor',a.floor>0?a.floor:''],['pin','Location',l.address||'']].filter(x=>x[2]!=='');
+ const stats=[['bed','Bedrooms',a.bedrooms>0?a.bedrooms:''],['bath','Bathrooms',a.bathrooms>0?a.bathrooms:''],['area','Area',a.area>0?a.area+' m²':''],['floor','Floor',a.floor>0?a.floor:''],['pin','Location',l.address||''],...exd(a)].filter(x=>x[2]!=='');
  const fac=(a.facilities||[]).filter(Boolean),gal=(a.gallery||[]).filter(Boolean);
  s.innerHTML=`<div class="wrap"><div class="ig">
  <div class="ih rv"><div class="row"><span class="bd ${t?'t':'v'}"><i></i>${t?'Taken':'Available'}</span><span class="idt">${esc(a.id)}</span></div><h2 class="nm">${nm(a)}</h2>${l.address?`<p class="lc2">${ic('pin')}<span>${esc(l.address)}</span></p>`:''}</div>
@@ -778,7 +784,13 @@ document.addEventListener('click',e=>{
  const gi=t.closest('[data-g]');if(gi)lbOpen(+gi.dataset.g);
 });
 function go(k){
- let y=0;if(k!=='home'){const el=$('#'+k);if(!el)return;y=el.getBoundingClientRect().top+scrollY-(k==='apartments'?72:96)}
+ let y=0;
+ if(k!=='home'){const el=$('#'+k);if(!el)return;
+  if(k==='contact'){
+   const c=el.querySelector('.cp')||el,r=c.getBoundingClientRect(),mob=getComputedStyle($('#nav')).display!=='none',t=84,bt=mob?96:24,room=innerHeight-t-bt;
+   const top=r.top-(c.classList.contains('rv')&&!c.classList.contains('in')?22:0); // ignore the not-yet-revealed offset
+   y=top+scrollY-(r.height<room?t+(room-r.height)/2:t+4)}
+  else y=el.getBoundingClientRect().top+scrollY-(k==='apartments'?72:96)}
  scrollTo({top:Math.max(0,y),behavior:calm.matches?'instant':'smooth'});
 }
 // Start fetching a video when the pointer rests on its card, so opening it is faster
@@ -804,7 +816,11 @@ function nav(){
  const k=cur==='show'?'apartments':sec;
  $$('#top .lk [data-k]').forEach(b=>{const on=b.dataset.k===k;b.classList.toggle('on',on);on?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current')});
  $$('#nav .it[data-k]').forEach(b=>{const on=b.dataset.k===k;b.classList.toggle('on',on);on?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current')});
- $('#nav').style.setProperty('--i',Math.max(0,['home','apartments','contact'].indexOf(k)));
+ const bub=$('#bub'),ob=$('#nav .it.on');
+ if(ob&&ob.offsetWidth){
+  const set=()=>{bub.style.width=ob.offsetWidth+'px';bub.style.height=ob.offsetHeight+'px';bub.style.top=ob.offsetTop+'px';bub.style.transform=`translateX(${ob.offsetLeft}px)`};
+  if(!bub.dataset.r){bub.style.transition='none';set();bub.offsetWidth;bub.style.transition='';bub.dataset.r=1}else set();
+ }
  const on=$('#top .lk .on'),ind=$('#top .ind');
  if(on&&on.offsetWidth){ind.style.width=on.offsetWidth+'px';ind.style.transform=`translateX(${on.offsetLeft}px)`;ind.style.opacity=1}else ind.style.opacity=0;
 }
