@@ -682,7 +682,9 @@ async function fx(src){
  const run=async w=>{
   if(w!==v)await new Promise(r=>{w.addEventListener('loadeddata',r,{once:true});w.addEventListener('error',r,{once:true});setTimeout(r,8000)});
   const c=document.createElement('canvas');c.width=W;c.height=H;const k=c.getContext('2d');k.imageSmoothingQuality='high';
-  const seek=t=>new Promise(r=>{let d=0;const f=()=>{if(!d){d=1;r()}};w.addEventListener('seeked',f,{once:true});w.currentTime=t;setTimeout(f,700)});
+  // 'seeked' can fire before the new picture is really ready (phones then hand back the PREVIOUS frame, which made neighbouring frames swap places).
+  // So after it fires we wait two display refreshes and until the video has a current frame, then grab it.
+  const seek=t=>new Promise(r=>{let d=0;const f=()=>{if(!d){d=1;r()}};w.addEventListener('seeked',()=>requestAnimationFrame(()=>requestAnimationFrame(async()=>{for(let q=0;q<30&&w.readyState<2;q++)await nap(10);f()})),{once:true});w.currentTime=t;setTimeout(f,900)});
   while(ok()&&nxt<order.length){
    if(moving){await nap(90);continue}
    const i=order[nxt++];await seek(.001+i/(N-1)*E);if(!ok())break;
