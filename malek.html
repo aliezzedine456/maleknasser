@@ -453,7 +453,6 @@ body{background:var(--iv);color:var(--tx);font-family:var(--sn);padding-bottom:c
 .review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
 .review-card{padding:22px;background:var(--surface);border:1px solid var(--ln);border-radius:10px}
 .review-stars{color:var(--aud);letter-spacing:.1em;margin-bottom:12px}.review-card blockquote{color:var(--tx);line-height:1.7}.review-card footer{margin-top:14px;color:var(--mt);font-size:13px;font-weight:700}
-.review-empty{padding:22px;border:1px dashed var(--ln);border-radius:8px;color:var(--mt);max-width:60ch}
 .contact-layout{display:grid;gap:22px}.contact-details{display:grid;gap:12px}.contact-map{min-height:210px;overflow:hidden;border-radius:10px;background:var(--iv2);border:1px solid rgba(255,255,255,.15)}
 .contact-map iframe{width:100%;height:100%;min-height:210px;border:0;filter:saturate(.8)}
 .contact-wa{display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:58px;padding:12px 18px;border-radius:6px;background:var(--au);color:#172235;font-weight:700}
@@ -723,12 +722,14 @@ function contactRefresh(){
  const box=$('#mapBox'),src=mapEmbedUrl();if(box){box.hidden=!src;box.innerHTML=src?`<iframe src="${esc(src)}" title="Map showing the apartment location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>`:''}
 }
 function reviewsRefresh(){
- const box=$('#reviewGrid');if(!box)return;
+ const box=$('#reviewGrid'),section=$('#reviews');if(!box||!section)return;
  const reviews=CFG.ids.flatMap(id=>{const a=get(id);return(Array.isArray(a?.reviews)?a.reviews:[]).map(r=>({...r,apartmentName:a.name}))}).filter(r=>String(r.text||'').trim());
- box.innerHTML=reviews.length?reviews.slice(0,9).map(r=>{
+ section.hidden=reviews.length===0;
+ if(!reviews.length){box.innerHTML='';return}
+ box.innerHTML=reviews.slice(0,9).map(r=>{
   const rating=Math.min(5,Math.max(1,Number(r.rating)||5));
   return`<article class="review-card"><div class="review-stars" aria-label="${rating} out of 5 stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div><blockquote>“${esc(r.text)}”</blockquote><footer>${esc(r.name||'Guest')}${r.apartmentName?` · ${esc(r.apartmentName)}`:''}</footer></article>`
- }).join(''):`<p class="review-empty">Malek hasn’t added guest reviews yet. When he does, you’ll see their words here.</p>`;
+ }).join('');
 }
 function footer(){return`<footer class="fo"><div class="wrap"><span class="br"><i class="lg">${ic('logo')}</i><span>Malek <b>Homes</b></span></span><span>© ${new Date().getFullYear()} Malek Homes. All rights reserved.</span></div></footer>`}
 function home(){
